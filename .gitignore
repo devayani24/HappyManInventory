@@ -1,31 +1,38 @@
-# Dependencies
-node_modules/
-
-# IDE
-.vscode/
-.idea/
-.DS_Store
-
 # Python
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*$py.class
 venv/
 env/
 .env
 
-# Database files (CRITICAL — never push sales data!)
-*.db
-*.sqlite
-*.sqlite3
-sales.json
-sales.csv
+# Database
+data/*.db
+data/*.db-journal
+data/*.sqlite
 
-# Excel exports
-*.xlsx
+# Reports (generated)
+report/*.xlsx
 
-# Local config
-config.local.js
+# Logs (future)
+logs/*.log
 
-# Logs
-*.log
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# PyInstaller
+build/
+dist/
+*.spec.bak
+
+# Private data
+seed_data_private.json
+
+# Optional: if materials list is also private
+# seed_data.json
