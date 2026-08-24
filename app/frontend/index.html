@@ -113,7 +113,127 @@
     </div>
     
 
+    <!-- =========================================================
+         STATE B — entry panel
+         Unhide this when a tile is clicked.
+         ========================================================= -->
 
+    <section class="panel" id="entry-panel" aria-labelledby="entry-company-name" hidden>
+
+      <header class="panel__head">
+        <div>
+          <h2 class="panel__title" id="entry-company-name">Meenakshi Stores</h2>
+          <p class="panel__meta" id="entry-company-meta">₹11,110 outstanding · last 22 Jul</p>
+        </div>
+        <div class="panel__tools">
+          <span class="mono muted" id="entry-date">2026-08-22</span>
+          <input class="input input--dc" id="entry-dc" placeholder="DC no." autocomplete="off">
+          <button class="icon-btn" id="entry-close" aria-label="Close without saving">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="panel__body">
+
+        <p class="prompt">What arrived? <span class="muted">Tap to add</span></p>
+
+        <div class="chips" id="material-chips">
+
+          <button class="chip" data-supplier-material-id="11" aria-pressed="true">
+            <span class="chip__name">
+              <svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 7"/></svg>
+              Milk powder
+            </span>
+            <span class="chip__rate">₹318 / kg</span>
+          </button>
+
+          <button class="chip" data-supplier-material-id="12" aria-pressed="true">
+            <span class="chip__name">
+              <svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 7"/></svg>
+              Cardamom
+            </span>
+            <span class="chip__rate">₹2,103 / kg</span>
+          </button>
+
+          <button class="chip" data-supplier-material-id="13" aria-pressed="false">
+            <span class="chip__name">Rava</span>
+            <span class="chip__rate">₹52 / kg</span>
+          </button>
+
+          <button class="chip chip--add" id="btn-other-material">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            <span>Something else</span>
+          </button>
+
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Material</th>
+              <th class="num">Received</th>
+              <th>Unit</th>
+              <th class="num">Rate</th>
+              <th class="num">Value</th>
+              <th><span class="sr-only">Remove</span></th>
+            </tr>
+          </thead>
+          <tbody id="entry-rows">
+
+            <tr class="row" data-supplier-material-id="11">
+              <td class="cell-material">
+                <span class="name">Milk powder</span>
+                <span class="local">பால் பொடி</span>
+              </td>
+              <td class="num mono">12</td>
+              <td class="unit">kg</td>
+              <td class="num mono rate">₹318</td>
+              <td class="num mono value">₹3,816</td>
+              <td class="ctr">
+                <button class="icon-btn icon-btn--sm" aria-label="Remove milk powder">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                </button>
+              </td>
+            </tr>
+
+            <tr class="row is-editing" data-supplier-material-id="12">
+              <td class="cell-material">
+                <span class="name">Cardamom</span>
+                <span class="local">ஏலக்காய்</span>
+              </td>
+              <td class="num">
+                <input class="input input--qty mono" value="1.2" inputmode="decimal"
+                       aria-label="Cardamom received">
+              </td>
+              <td class="unit">kg</td>
+              <td class="num mono rate">₹2,103</td>
+              <td class="num mono value">₹2,524</td>
+              <td class="ctr">
+                <button class="icon-btn icon-btn--sm" aria-label="Remove cardamom">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                </button>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+
+        <p class="empty-rows" id="entry-rows-empty" hidden>
+          Nothing added. Tap a material above to start.
+        </p>
+
+      </div>
+
+      <footer class="panel__foot">
+        <p class="hint">Saves straight away · fix mistakes under Deliveries</p>
+        <div class="panel__actions">
+          <span class="total">Value <strong class="mono" id="entry-total">₹6,340</strong></span>
+          <button class="btn btn--primary" id="btn-save-delivery">Save delivery</button>
+        </div>
+      </footer>
+
+    </section>
 
   </main>
 </div>
@@ -142,7 +262,37 @@
   </button>
 </template>
 
+<!-- one material chip inside the panel -->
+<template id="tpl-material-chip">
+  <button class="chip" data-supplier-material-id="" aria-pressed="false">
+    <span class="chip__name">
+      <svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 7"/></svg>
+      <span class="chip__label"></span>
+    </span>
+    <span class="chip__rate"></span>
+  </button>
+</template>
 
+<!-- one editable row -->
+<template id="tpl-entry-row">
+  <tr class="row" data-supplier-material-id="">
+    <td class="cell-material">
+      <span class="name"></span>
+      <span class="local"></span>
+    </td>
+    <td class="num">
+      <input class="input input--qty mono" inputmode="decimal" autocomplete="off">
+    </td>
+    <td class="unit"></td>
+    <td class="num mono rate"></td>
+    <td class="num mono value">—</td>
+    <td class="ctr">
+      <button class="icon-btn icon-btn--sm btn-remove-row" aria-label="Remove row">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </td>
+  </tr>
+</template>
 
 <!-- <script src="scripts/recordDelivery.js"></script> -->
 </body>
