@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HappyMan Inventory</title>
+<link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+<div class="app">
+
+  <nav class="sidebar" aria-label="Main">
+    <div class="brand">HappyMan stock</div>
+
+    <button class="nav is-active" data-view="record" aria-current="page">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>
+      <span>Record delivery</span>
+    </button>
+
+    <button class="nav" data-view="deliveries">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <span>Deliveries</span>
+    </button>
+
+    <button class="nav" data-view="payments">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/></svg>
+      <span>Payments due</span>
+      <span class="badge" id="nav-due-count">6</span>
+    </button>
+
+    <button class="nav" data-view="companies">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20V9l5-3 5 3v11M13 20V12h8v8M6.5 12h2M6.5 15.5h2M16 15.5h2"/></svg>
+      <span>Companies</span>
+    </button>
+
+    <button class="nav" data-view="export">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 17v3h16v-3"/></svg>
+      <span>Export</span>
+    </button>
+  </nav>
+
+  <main class="main">
+
+    <!-- =========================================================
+         STATE A — company picker
+         Hide these three when the panel opens.
+         ========================================================= -->
+    <div >
+      <header class="head" id="record-head">
+      <div>
+        <h1 class="title">Record delivery</h1>
+        <p class="sub">Pick a company to record what arrived</p>
+      </div>
+      <span class="mono muted" id="today-date">2026-08-22</span>
+    </header>
+
+    <div class="grid" id="company-grid">
+
+      <button class="tile is-done" data-supplier-id="1">
+        <span class="tile__top">
+          <span class="tile__name">Ravi Traders</span>
+          <span class="tile__count">4 materials</span>
+        </span>
+        <span class="tile__materials">Sugar · ghee · cashew · besan</span>
+        <span class="tile__foot">
+          <span class="tile__state">
+            <svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 7"/></svg>
+            Added today
+          </span>
+          <span class="tile__right mono">₹13,740</span>
+        </span>
+      </button>
+
+      <button class="tile" data-supplier-id="2">
+        <span class="tile__top">
+          <span class="tile__name">Meenakshi Stores</span>
+          <span class="tile__count">3 materials</span>
+        </span>
+        <span class="tile__materials">Milk powder · cardamom · rava</span>
+        <span class="tile__foot">
+          <span class="tile__last">Last 22 Jul</span>
+          <span class="tile__right pill mono">₹11,110 due</span>
+        </span>
+      </button>
+
+      <button class="tile is-done" data-supplier-id="3">
+        <span class="tile__top">
+          <span class="tile__name">Selvam Oils</span>
+          <span class="tile__count">1 material</span>
+        </span>
+        <span class="tile__materials">Groundnut oil</span>
+        <span class="tile__foot">
+          <span class="tile__state">
+            <svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 7"/></svg>
+            Added today
+          </span>
+          <span class="tile__right mono">₹4,800</span>
+        </span>
+      </button>
+
+      <button class="tile tile--add" id="btn-add-company">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        <span>New company</span>
+      </button>
+
+    </div>
+
+    <p class="note" id="record-note">
+      Added today stays until midnight, so you can see what is still outstanding
+      for this round. Corrections happen under Deliveries.
+    </p>
+    </div>
+    
+
+
+
+  </main>
+</div>
+
+
+<!-- =============================================================
+     TEMPLATES — clone these in JS, don't build HTML from strings
+     ============================================================= -->
+
+<!-- one company tile -->
+<template id="tpl-company-card">
+  <button class="tile" data-supplier-id="">
+    <span class="tile__top">
+      <span class="tile__name"></span>
+      <span class="tile__count"></span>
+    </span>
+    <span class="tile__materials"></span>
+    <span class="tile__foot">
+      <span class="tile__state" hidden>
+        <svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 7"/></svg>
+        Added today
+      </span>
+      <span class="tile__last"></span>
+      <span class="tile__right mono"></span>
+    </span>
+  </button>
+</template>
+
+
+
+<!-- <script src="scripts/recordDelivery.js"></script> -->
+</body>
+</html>
