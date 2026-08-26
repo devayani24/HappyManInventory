@@ -618,7 +618,124 @@
     </section>
 
 
+    <!-- ===========================================================
+       COMPANIES
+       =========================================================== -->
+    <section class="view view--split" id="view-companies" hidden>
 
+      <aside class="subnav">
+        <p class="subnav__count" id="company-count">3 companies</p>
+
+        <button class="subnav__item is-active" data-supplier-id="1">
+          <span class="subnav__name">Ravi Traders</span>
+          <span class="subnav__meta">4 materials</span>
+        </button>
+
+        <button class="subnav__item" data-supplier-id="2">
+          <span class="subnav__name">Meenakshi Stores</span>
+          <span class="subnav__meta">3 materials</span>
+        </button>
+
+        <button class="subnav__item" data-supplier-id="3">
+          <span class="subnav__name">Selvam Oils</span>
+          <span class="subnav__meta">1 material</span>
+        </button>
+
+        <button class="subnav__add" id="btn-add-company">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          <span>Add company</span>
+        </button>
+      </aside>
+
+      <div class="detail">
+
+        <div id="company-detail">
+          <h1 class="title" id="company-detail-name">Ravi Traders</h1>
+          <p class="sub" id="company-detail-meta">Madurai · 98431 22110 · monthly delivery</p>
+
+          <p class="prompt">Materials bought from this company</p>
+
+          <table class="table table--rates">
+            <thead>
+              <tr>
+                <th>Material</th>
+                <th>Unit</th>
+                <th class="num">Rate</th>
+                <th>Updated</th>
+                <th class="ctr">Active</th>
+              </tr>
+            </thead>
+            <tbody id="company-materials-body">
+
+              <tr class="row-rate" data-supplier-material-id="1">
+                <td class="cell-material"><span class="name">Sugar</span> <span class="local">சர்க்கரை</span></td>
+                <td class="unit">kg</td>
+                <td class="num mono rate">₹44</td>
+                <td class="small muted updated">3 Jun</td>
+                <td class="ctr">
+                  <button class="switch" role="switch" aria-checked="true" aria-label="Sugar active">
+                    <span class="switch__knob"></span>
+                  </button>
+                </td>
+              </tr>
+
+              <tr class="row-rate is-stale" data-supplier-material-id="2">
+                <td class="cell-material"><span class="name">Ghee</span> <span class="local">நெய்</span></td>
+                <td class="unit">kg</td>
+                <td class="num mono rate">₹520</td>
+                <td class="small updated">12 Feb · stale</td>
+                <td class="ctr">
+                  <button class="switch" role="switch" aria-checked="true" aria-label="Ghee active">
+                    <span class="switch__knob"></span>
+                  </button>
+                </td>
+              </tr>
+
+              <tr class="row-rate" data-supplier-material-id="3">
+                <td class="cell-material"><span class="name">Cashew</span> <span class="local">முந்திரி</span></td>
+                <td class="unit">kg</td>
+                <td class="num mono rate">₹860</td>
+                <td class="small muted updated">3 Jun</td>
+                <td class="ctr">
+                  <button class="switch" role="switch" aria-checked="true" aria-label="Cashew active">
+                    <span class="switch__knob"></span>
+                  </button>
+                </td>
+              </tr>
+
+              <tr class="row-rate is-inactive" data-supplier-material-id="4">
+                <td class="cell-material"><span class="name">Besan</span> <span class="local">கடலை மாவு</span></td>
+                <td class="unit">kg</td>
+                <td class="num mono rate">₹150.50</td>
+                <td class="small updated">not since Feb</td>
+                <td class="ctr">
+                  <button class="switch" role="switch" aria-checked="false" aria-label="Besan active">
+                    <span class="switch__knob"></span>
+                  </button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+          <button class="row-add" id="btn-add-material">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            <span>Add material to this company</span>
+          </button>
+
+          <p class="note">
+            Switching a material off hides it when recording deliveries.
+            Past deliveries keep their own rates and stay intact.
+          </p>
+        </div>
+
+        <div class="empty" id="company-detail-empty" hidden>
+          <p class="empty__title">Pick a company</p>
+          <p class="empty__body">Choose one on the left to see its materials and rates.</p>
+        </div>
+
+      </div>
+    </section>
 
   </main>
 </div>
