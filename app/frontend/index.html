@@ -511,6 +511,113 @@
     </section>
 
 
+    <!-- ===========================================================
+       PAYMENTS DUE
+       =========================================================== -->
+    <section class="view" id="view-payments" hidden>
+
+      <div class="stats stats--3">
+        <div class="stat">
+          <span class="stat__label">Total outstanding</span>
+          <span class="stat__value mono" id="pay-total">₹41,290</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Companies</span>
+          <span class="stat__value mono" id="pay-companies">3</span>
+        </div>
+        <div class="stat stat--warn">
+          <span class="stat__label">Oldest unpaid</span>
+          <span class="stat__value mono" id="pay-oldest">38 days</span>
+        </div>
+      </div>
+
+      <div id="payments-groups">
+
+        <section class="group" data-supplier-id="1">
+          <header class="group__head">
+            <span class="group__name">Ravi Traders</span>
+            <span class="group__total mono">₹23,840</span>
+          </header>
+
+          <div class="group__rows">
+
+            <label class="due" data-delivery-id="31">
+              <input type="checkbox" class="due__check">
+              <span class="due__main">
+                <span class="due__title">22 Aug · 3 materials</span>
+                <span class="due__sub muted small">Sugar, ghee, cashew</span>
+              </span>
+              <span class="due__amount mono">₹13,740</span>
+            </label>
+
+            <label class="due" data-delivery-id="27">
+              <input type="checkbox" class="due__check" checked>
+              <span class="due__main">
+                <span class="due__title">14 Aug · 2 materials</span>
+                <span class="due__sub small">Part paid ₹5,000 of ₹10,100 on 18 Aug</span>
+              </span>
+              <span class="due__amount mono">₹5,100 <span class="due__tag">due</span></span>
+            </label>
+
+          </div>
+
+          <div class="settle">
+            <span class="settle__label">Paying</span>
+            <input class="input input--amount mono" value="₹5,100" inputmode="decimal" aria-label="Amount paying">
+            <button class="btn btn--primary btn--sm">Settle</button>
+          </div>
+        </section>
+
+        <section class="group" data-supplier-id="2">
+          <header class="group__head">
+            <span class="group__name">Meenakshi Stores</span>
+            <span class="group__total mono">₹11,110</span>
+          </header>
+
+          <div class="group__rows">
+
+            <label class="due" data-delivery-id="24">
+              <input type="checkbox" class="due__check">
+              <span class="due__main">
+                <span class="due__title">19 Aug · 2 materials</span>
+                <span class="due__sub muted small">Milk powder, cardamom</span>
+              </span>
+              <span class="due__amount mono">₹6,340</span>
+            </label>
+
+            <label class="due" data-delivery-id="11">
+              <input type="checkbox" class="due__check">
+              <span class="due__main">
+                <span class="due__title">
+                  15 Jul · 1 material
+                  <span class="pill pill--warn pill--sm">38 days</span>
+                </span>
+                <span class="due__sub muted small">Milk powder</span>
+              </span>
+              <span class="due__amount mono">₹4,770</span>
+            </label>
+
+          </div>
+
+          <div class="settle" hidden>
+            <span class="settle__label">Paying</span>
+            <input class="input input--amount mono" inputmode="decimal" aria-label="Amount paying">
+            <button class="btn btn--primary btn--sm">Settle</button>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="empty" id="payments-empty" hidden>
+        <p class="empty__title">Everything is settled</p>
+        <p class="empty__body">No company is owed anything right now.</p>
+      </div>
+
+      <p class="note">Fully settled deliveries leave this list. They stay visible under Deliveries.</p>
+
+    </section>
+
+
 
 
   </main>
