@@ -47,7 +47,7 @@
          STATE A — company picker
          Hide these three when the panel opens.
          ========================================================= -->
-    <section id="record-delivery-panel" hidden>
+    <section class="view" id="record-delivery-panel" data-view="record">
       <header class="head" id="record-head">
       <div>
         <h1 class="title">Record delivery</h1>
@@ -119,7 +119,7 @@
          Unhide this when a tile is clicked.
          ========================================================= -->
 
-    <section class="panel" id="entry-panel" aria-labelledby="entry-company-name" hidden>
+    <section class="view" id="entry-panel" aria-labelledby="entry-company-name" hidden>
 
       <header class="panel__head">
         <div>
@@ -239,7 +239,7 @@
     <!-- ===========================================================
       DELIVERIES
       =========================================================== -->
-    <section class="view" id="view-deliveries">
+    <section class="view" id="view-deliveries" data-view="deliveries" hidden>
 
       <header class="head">
         <h1 class="title">Deliveries</h1>
@@ -514,7 +514,7 @@
     <!-- ===========================================================
        PAYMENTS DUE
        =========================================================== -->
-    <section class="view" id="view-payments" hidden>
+    <section class="view" id="view-payments" data-view="payments" hidden>
 
       <div class="stats stats--3">
         <div class="stat">
@@ -621,7 +621,7 @@
     <!-- ===========================================================
        COMPANIES
        =========================================================== -->
-    <section class="view view--split" id="view-companies" hidden>
+    <section class="view view--split" id="view-companies" data-view="companies" hidden>
 
       <aside class="subnav">
         <p class="subnav__count" id="company-count">3 companies</p>
