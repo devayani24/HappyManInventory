@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HappyMan Inventory</title>
 <link rel="stylesheet" href="styles/main.css">
+<link rel="stylesheet" href="styles/panel.css">
 </head>
 <body>
 
@@ -46,7 +47,7 @@
          STATE A — company picker
          Hide these three when the panel opens.
          ========================================================= -->
-    <section id="record-delivery-panel">
+    <section id="record-delivery-panel" hidden>
       <header class="head" id="record-head">
       <div>
         <h1 class="title">Record delivery</h1>
@@ -235,8 +236,286 @@
 
     </section>
 
+    <!-- ===========================================================
+      DELIVERIES
+      =========================================================== -->
+    <section class="view" id="view-deliveries">
+
+      <header class="head">
+        <h1 class="title">Deliveries</h1>
+        <span class="muted small">Value received, not amount paid</span>
+      </header>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="stat__label">Today</span>
+          <span class="stat__value mono" id="stat-today">₹13,740</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">This week</span>
+          <span class="stat__value mono" id="stat-week">₹20,080</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">This month</span>
+          <span class="stat__value mono" id="stat-month">₹84,200</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">vs last month</span>
+          <span class="stat__value mono is-up" id="stat-change">+11%</span>
+        </div>
+      </div>
+
+
+      <!-- ===================== TODAY ===================== -->
+
+      <div class="table-group">
+        <h2 class="group-heading">
+          Today
+          <span class="muted small">1 delivery · ₹13,740</span>
+        </h2>
+
+        <table class="table table--deliveries">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Company</th>
+              <th>Materials</th>
+              <th class="num">Value</th>
+              <th class="ctr">Status</th>
+              <th><span class="sr-only">Expand</span></th>
+            </tr>
+          </thead>
+          <tbody id="deliveries-today">
+
+            <tr class="row-delivery is-open" data-delivery-id="31">
+              <td class="mono small date">22 Aug</td>
+              <td class="company">Ravi Traders</td>
+              <td class="muted small materials">Sugar, ghee, cashew</td>
+              <td class="num mono value">₹13,740</td>
+              <td class="ctr"><span class="pill pill--warn">Unpaid</span></td>
+              <td class="ctr">
+                <button class="icon-btn icon-btn--sm" aria-expanded="true" aria-label="Hide detail">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
+                </button>
+              </td>
+            </tr>
+            <tr class="row-detail" data-delivery-id="31">
+              <td colspan="6">
+                <div class="detail-box">
+                  <ul class="lines">
+                    <li class="line"><span>Sugar — 50 kg @ ₹44</span><span class="mono">₹2,200</span></li>
+                    <li class="line"><span>Ghee — 15 kg @ ₹540</span><span class="mono">₹8,100</span></li>
+                    <li class="line"><span>Cashew — 4 kg @ ₹860</span><span class="mono">₹3,440</span></li>
+                  </ul>
+                  <p class="detail-meta muted small">DC 4471 · rates frozen at delivery</p>
+                  <div class="actions">
+                    <button class="btn btn--sm btn-cancel-delivery">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M6 6l12 12"/></svg>
+                      Cancel delivery
+                    </button>
+                    <span class="muted small">Nothing paid yet — cancel and record it again to correct</span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+
+        <p class="empty empty--inline" id="deliveries-today-empty" hidden>
+          Nothing recorded today yet.
+        </p>
+      </div>
+
+
+      <!-- ===================== EARLIER ===================== -->
+
+      <div class="table-group">
+        <h2 class="group-heading">
+          Earlier
+          <span class="muted small">August 2026</span>
+        </h2>
+
+        <table class="table table--deliveries table--past">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Company</th>
+              <th>Materials</th>
+              <th class="num">Value</th>
+              <th class="ctr">Status</th>
+              <th><span class="sr-only">Expand</span></th>
+            </tr>
+          </thead>
+          <tbody id="deliveries-past">
+
+            <!-- part paid → locked, payments shown, unwind path offered -->
+            <tr class="row-delivery is-locked" data-delivery-id="27">
+              <td class="mono small date">14 Aug</td>
+              <td class="company">Ravi Traders</td>
+              <td class="muted small materials">Sugar, besan, cashew</td>
+              <td class="num mono value">₹10,100</td>
+              <td class="ctr"><span class="pill pill--part">₹5,100 due</span></td>
+              <td class="ctr">
+                <button class="icon-btn icon-btn--sm" aria-expanded="false" aria-label="Show detail">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+              </td>
+            </tr>
+            <tr class="row-detail is-locked" data-delivery-id="27" hidden>
+              <td colspan="6">
+                <div class="detail-box">
+
+                  <ul class="lines">
+                    <li class="line"><span>Sugar — 50 kg @ ₹42</span><span class="mono">₹2,100</span></li>
+                    <li class="line"><span>Besan — 20 kg @ ₹150.50</span><span class="mono">₹3,010</span></li>
+                    <li class="line"><span>Cashew — 5 kg @ ₹998</span><span class="mono">₹4,990</span></li>
+                  </ul>
+
+                  <p class="detail-label">Payments</p>
+                  <ul class="lines">
+                    <li class="line" data-payment-id="8">
+                      <span>18 Aug · GPay <span class="muted">· part of a ₹12,000 transfer</span></span>
+                      <span class="line__right">
+                        <span class="mono">₹5,000</span>
+                        <button class="link btn-remove-payment">Remove</button>
+                      </span>
+                    </li>
+                  </ul>
+                  <p class="lines__total"><span>Still due</span><span class="mono">₹5,100</span></p>
+
+                  <div class="lockbox">
+                    <p class="lockbox__title">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+                      Locked — ₹5,000 paid on 18 Aug
+                    </p>
+                    <p class="lockbox__body">To correct this delivery: remove the payment above, cancel the delivery, record it again, then re-enter the payment.</p>
+                  </div>
+
+                </div>
+              </td>
+            </tr>
+
+            <!-- unpaid, older → still cancellable -->
+            <tr class="row-delivery" data-delivery-id="22">
+              <td class="mono small date">19 Aug</td>
+              <td class="company">Meenakshi Stores</td>
+              <td class="muted small materials">Milk powder, cardamom</td>
+              <td class="num mono value">₹6,340</td>
+              <td class="ctr"><span class="pill pill--warn">Unpaid</span></td>
+              <td class="ctr">
+                <button class="icon-btn icon-btn--sm" aria-expanded="false" aria-label="Show detail">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+              </td>
+            </tr>
+            <tr class="row-detail" data-delivery-id="22" hidden>
+              <td colspan="6">
+                <div class="detail-box">
+                  <ul class="lines">
+                    <li class="line"><span>Milk powder — 12 kg @ ₹318</span><span class="mono">₹3,816</span></li>
+                    <li class="line"><span>Cardamom — 1.2 kg @ ₹2,103</span><span class="mono">₹2,524</span></li>
+                  </ul>
+                  <div class="actions">
+                    <button class="btn btn--sm btn-cancel-delivery">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M6 6l12 12"/></svg>
+                      Cancel delivery
+                    </button>
+                    <span class="muted small">Nothing paid yet — cancel and record it again to correct</span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- fully paid → locked -->
+            <tr class="row-delivery is-settled" data-delivery-id="19">
+              <td class="mono small date">11 Aug</td>
+              <td class="company">Selvam Oils</td>
+              <td class="muted small materials">Groundnut oil</td>
+              <td class="num mono value">₹4,800</td>
+              <td class="ctr"><span class="pill pill--ok">Paid</span></td>
+              <td class="ctr">
+                <button class="icon-btn icon-btn--sm" aria-expanded="false" aria-label="Show detail">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+              </td>
+            </tr>
+            <tr class="row-detail" data-delivery-id="19" hidden>
+              <td colspan="6">
+                <div class="detail-box">
+
+                  <ul class="lines">
+                    <li class="line"><span>Groundnut oil — 30 L @ ₹160</span><span class="mono">₹4,800</span></li>
+                  </ul>
+
+                  <p class="detail-label">Payments</p>
+                  <ul class="lines">
+                    <li class="line" data-payment-id="6">
+                      <span>13 Aug · Cash</span>
+                      <span class="line__right">
+                        <span class="mono">₹4,800</span>
+                        <button class="link btn-remove-payment">Remove</button>
+                      </span>
+                    </li>
+                  </ul>
+                  <p class="lines__total"><span>Still due</span><span class="mono">₹0</span></p>
+
+                  <div class="lockbox">
+                    <p class="lockbox__title">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+                      Locked — settled in full on 13 Aug
+                    </p>
+                    <p class="lockbox__body">To correct this delivery: remove the payment above, cancel the delivery, record it again, then re-enter the payment.</p>
+                  </div>
+
+                </div>
+              </td>
+            </tr>
+
+            <!-- cancelled → kept for the audit trail -->
+            <tr class="row-delivery is-cancelled" data-delivery-id="18">
+              <td class="mono small date">8 Aug</td>
+              <td class="company">Ravi Traders</td>
+              <td class="muted small materials">Sugar, ghee</td>
+              <td class="num mono value">₹9,400</td>
+              <td class="ctr"><span class="pill pill--void">Cancelled</span></td>
+              <td class="ctr">
+                <button class="icon-btn icon-btn--sm" aria-expanded="false" aria-label="Show detail">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+              </td>
+            </tr>
+            <tr class="row-detail is-cancelled" data-delivery-id="18" hidden>
+              <td colspan="6">
+                <div class="detail-box">
+                  <ul class="lines">
+                    <li class="line"><span>Sugar — 50 kg @ ₹44</span><span class="mono">₹2,200</span></li>
+                    <li class="line"><span>Ghee — 20 kg @ ₹360</span><span class="mono">₹7,200</span></li>
+                  </ul>
+                  <p class="locknote">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M6 6l12 12"/></svg>
+                    Cancelled 8 Aug · wrong quantity · not counted in any total
+                  </p>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+
+        <p class="empty empty--inline" id="deliveries-past-empty" hidden>
+          No earlier deliveries this month.
+        </p>
+      </div>
+
+    </section>
+
+
+
+
   </main>
 </div>
+
 
 
 <!-- =============================================================
