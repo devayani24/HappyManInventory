@@ -1,0 +1,32 @@
+version: 1
+disable_existing_loggers: false
+
+formatters:
+  console:
+    format: "%(levelname)-8s %(name)s: %(message)s"
+  detailed:
+    format: "%(asctime)s %(levelname)-8s [%(name)s:%(lineno)d] %(message)s"
+    datefmt: "%Y-%m-%d %H:%M:%S"
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO                           # audience: you, live. INFO+ only.
+    formatter: console  
+    stream: ext://sys.stdout
+  rotating_file:
+    class: logging.handlers.RotatingFileHandler
+    level: DEBUG                          # audience: future you, debugging. Take everything.
+    formatter: detailed
+    filename: logs/app.log
+    maxBytes: 1000000
+    backupCount: 3
+    encoding: utf-8
+
+loggers:
+  app:
+    level: DEBUG                          # source: my code. Permissive — let handlers decide.
+root:
+    level: WARNING                        # default for unknown sources.
+    handlers: [console, rotating_file]
+  

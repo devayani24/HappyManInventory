@@ -2,12 +2,20 @@ import json
 from app.config import SEED_DATA_PATH, DATABASE_PATH, SCHEMA_PATH
 import sqlite3
 from contextlib import contextmanager
+import logging
 
-from datetime import datetime
+logger = logging.getLogger("app.db.setup_db") 
 
 def load_seed():
+  logger.debug("Reading seed file %s", SEED_DATA_PATH)
   with open(SEED_DATA_PATH, encoding="utf-8") as f:
-    return json.load(f)
+    seed = json.load(f)
+  logger.debug(
+        "Seed contains %d categories, %d suppliers, %d materials, %d links",
+        len(seed["categories"]), len(seed["suppliers"]),
+        len(seed["materials"]), len(seed["supplier_materials"]),
+    )
+  return seed
 
 
 def validate(seed):
@@ -40,13 +48,17 @@ def validate(seed):
               problems.append(f"duplicate {key[:-1]} name '{name}'")
 
   if problems:
+      for p in problems:
+            logger.error("seed validation: %s", p)
       raise ValueError(
         f"{len(problems)} bad reference(s) in seed_data.json:\n  "
         + "\n  ".join(problems)
       )
+  logger.info("Seed data is valid")
 
 @contextmanager
 def get_connection():
+    logger.debug("Opening connection to %s", DATABASE_PATH)
     conn = sqlite3.connect(DATABASE_PATH)
     # rows accessible by column name
     conn.row_factory = sqlite3.Row
@@ -55,11 +67,14 @@ def get_connection():
     try:
         yield conn
         conn.commit()
-    except:
+        logger.debug("Transaction committed")
+    except Exception:
         conn.rollback()
+        logger.exception("Transaction rolled back")
         raise
     finally:
         conn.close()
+        logger.debug("Connection closed")
 
 def get_schema_path():
     return SCHEMA_PATH
@@ -72,101 +87,125 @@ def init_schema(conn):
 
     
     conn.executescript(schema_sql)
-    print(f"✓ Database initialized at {DATABASE_PATH}")
+    logger.info("Schema initialized at %s", DATABASE_PATH)
 
 
 def seed_categories(conn, seed):
     categories = seed["categories"]
-    
     cursor = conn.cursor()
-    category_ids = {}
 
+    inserted = 0
     for c in categories:
         cursor.execute(
         """
-        INSERT INTO categories(name,local_name,sort_order) 
+        INSERT OR IGNORE INTO categories(name,local_name,sort_order) 
         VALUES(?,?,?) 
         """,
         (c["name"],c.get("local_name") or None,c["sort_order"])
         )
-        category_ids[c["name"]] = cursor.lastrowid
-    print(f"✓ Seeded {len(categories)} categories")
+        inserted += cursor.rowcount
+
+    cursor.execute("SELECT id, name FROM categories")
+    category_ids = {row["name"]: row["id"] for row in cursor.fetchall()}
+
+    report_seed("supplier_materials", len(categories), inserted)
     return category_ids
 
 def seed_suppliers(conn, seed):
     suppliers = seed["suppliers"]
-    
     cursor = conn.cursor()
-    supplier_ids = {}
 
+    inserted = 0
     for s in suppliers:
         cursor.execute(
         """
-        INSERT INTO suppliers(name,local_name) 
+        INSERT OR IGNORE INTO suppliers(name,local_name) 
         VALUES(?,?) 
         """,
         (s["name"],s.get("local_name") or None)
         )
-        supplier_ids[s["name"]] = cursor.lastrowid
-    print(f"✓ Seeded {len(suppliers)} suppliers")
+        inserted += cursor.rowcount
+
+    cursor.execute("SELECT id, name FROM suppliers")
+    supplier_ids = {row["name"]: row["id"] for row in cursor.fetchall()}
+
+    report_seed("supplier_materials", len(suppliers), inserted)
     return supplier_ids
 
 def seed_materials(conn, seed, category_ids):
     materials = seed['materials']
-
     cursor = conn.cursor()
-    material_ids = {}
 
+    inserted = 0
     for m in materials:
         cursor.execute(
         """
-        INSERT INTO materials(category_id,name,local_name,base_unit) 
+        INSERT OR IGNORE INTO materials(category_id,name,local_name,base_unit) 
         VALUES(?,?,?,?) 
         """,
         (category_ids[m["category"]], m["name"], m.get("local_name") or None, m["base_unit"])
         )
-        material_ids[m["name"]] = cursor.lastrowid
-    print(f"✓ Seeded {len(materials)} materials")
+        inserted += cursor.rowcount
+
+    cursor.execute("SELECT id, name FROM materials")
+    material_ids = {row["name"]: row["id"] for row in cursor.fetchall()}
+       
+    report_seed("supplier_materials", len(materials), inserted)
     return material_ids
 
 def seed_supplier_materials(conn, seed, supplier_ids,material_ids):
     supplier_materials = seed['supplier_materials']
     
     cursor = conn.cursor()
+
+    inserted = 0
     for sm in supplier_materials:
 
         cursor.execute(
         """
-        INSERT INTO supplier_materials(supplier_id, material_id) 
+        INSERT OR IGNORE INTO supplier_materials(supplier_id, material_id) 
         VALUES(?,?) 
         """,
         (supplier_ids[sm["supplier"]], material_ids[sm["material"]])
         )
-    print(f"✓ Seeded {len(supplier_materials)} supplier_materials")
+        inserted += cursor.rowcount
+    
+    report_seed("supplier_materials", len(supplier_materials), inserted)
+
+def report_seed(table, attempted, inserted):
+    skipped = attempted - inserted
+    if attempted == 0:
+        logger.warning("%s: seed file has no rows", table)
+    elif inserted == 0:
+        logger.warning("%s: nothing inserted, all %d rows already present",
+                       table, attempted)
+    elif skipped:
+        logger.warning("%s: inserted %d, skipped %d already present",
+                       table, inserted, skipped)
+    else:
+        logger.info("%s: seeded %d rows", table, inserted)
 
 def setup():
     """Run the full database initialization."""
 
-    print(f"Setting up database at {DATABASE_PATH}")
+    logger.info("Setting up database at %s", DATABASE_PATH)
     
-    
-    print(f"Load and Validate JSON seed data")
     seed = load_seed()
     validate(seed)
-    print("[ok] seed data is valid")
 
     with get_connection() as conn:
-        print("→ Initializing schema...")
         init_schema(conn)
-        
-        print(f"Load seed data into the database ...")
         category_ids = seed_categories(conn, seed)
         supplier_ids = seed_suppliers(conn, seed)
         material_ids = seed_materials(conn, seed, category_ids)
         seed_supplier_materials(conn, seed, supplier_ids, material_ids)
 
+    logger.info("Database setup complete")
+
     
   
 # temporary
 if __name__ == "__main__":
+  from app.logger import configure_logging
+  configure_logging()
   setup()

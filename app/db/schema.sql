@@ -1,7 +1,7 @@
 
 
 -- Table: suppliers
-CREATE TABLE suppliers (
+CREATE TABLE IF NOT EXISTS suppliers (
    id INTEGER PRIMARY KEY AUTOINCREMENT,
    name TEXT NOT NULL,
    local_name TEXT,
@@ -18,7 +18,7 @@ CREATE TABLE suppliers (
 
 -- Table: categories
 -- Groups materials in the entry panel.
-CREATE TABLE categories (
+CREATE TABLE IF NOT EXISTS categories (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     name        TEXT    NOT NULL,
     local_name  TEXT,
@@ -33,7 +33,7 @@ CREATE TABLE categories (
 
 
 -- Table: materials
-CREATE TABLE materials (
+CREATE TABLE IF NOT EXISTS materials (
    id INTEGER PRIMARY KEY AUTOINCREMENT,
    category_id  INTEGER NOT NULL,
    name TEXT  NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE materials (
 );
 
 -- Table: supplier_materials
-CREATE TABLE supplier_materials (
+CREATE TABLE IF NOT EXISTS supplier_materials (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	supplier_id INTEGER  NOT NULL,
 	material_id INTEGER  NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE supplier_materials (
 
 
 -- Table: deliveries
-CREATE TABLE deliveries (
+CREATE TABLE IF NOT EXISTS deliveries (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	source TEXT NOT NULL DEFAULT 'supplier',
 	supplier_id INTEGER,
@@ -99,7 +99,7 @@ CREATE TABLE deliveries (
 -- material_id is always set.
 -- supplier_material_id is set only when the line came off a rate card.
 -- rate is snapshotted at save and never read back from the rate card.
-CREATE TABLE delivery_items (
+CREATE TABLE IF NOT EXISTS delivery_items (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	delivery_id INTEGER  NOT NULL,
 	material_id INTEGER NOT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE delivery_items (
 -- A local purchase gets its payment row written in the same transaction
 -- as the delivery, so outstanding is zero and it never reaches Payments due.
 
-CREATE TABLE payments (
+CREATE TABLE IF NOT EXISTS payments (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	delivery_id INTEGER  NOT NULL,
 	amount INTEGER  NOT NULL,
@@ -152,9 +152,9 @@ CREATE TABLE payments (
 -- Indexes
 -- ============================================================
 
-CREATE INDEX idx_materials_category      ON materials(category_id);
-CREATE INDEX idx_delivery_items_delivery ON delivery_items(delivery_id);
-CREATE INDEX idx_delivery_items_material ON delivery_items(material_id);
-CREATE INDEX idx_payments_delivery       ON payments(delivery_id);
-CREATE INDEX idx_deliveries_supplier     ON deliveries(supplier_id);
-CREATE INDEX idx_deliveries_date         ON deliveries(delivery_date);
+CREATE INDEX IF NOT EXISTS idx_materials_category      ON materials(category_id);
+CREATE INDEX IF NOT EXISTS idx_delivery_items_delivery ON delivery_items(delivery_id);
+CREATE INDEX IF NOT EXISTS idx_delivery_items_material ON delivery_items(material_id);
+CREATE INDEX IF NOT EXISTS idx_payments_delivery       ON payments(delivery_id);
+CREATE INDEX IF NOT EXISTS idx_deliveries_supplier     ON deliveries(supplier_id);
+CREATE INDEX IF NOT EXISTS idx_deliveries_date         ON deliveries(delivery_date);
