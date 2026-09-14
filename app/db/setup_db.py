@@ -206,6 +206,6 @@ def setup():
   
 # temporary
 if __name__ == "__main__":
-  from app.logger import configure_logging
+  from app.utils.logger import configure_logging
   configure_logging()
   setup()
