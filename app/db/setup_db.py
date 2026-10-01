@@ -1,5 +1,5 @@
 import json
-from app.config import SEED_DATA_PATH, DATABASE_PATH, SCHEMA_PATH
+from app.config import SEED_DATA_PATH, DATABASE_PATH, SCHEMA_PATH, MIGRATIONS_DIR
 import sqlite3
 from contextlib import contextmanager
 import logging
@@ -76,17 +76,13 @@ def get_connection():
         conn.close()
         logger.debug("Connection closed")
 
-def get_schema_path():
-    return SCHEMA_PATH
-
-
 def init_schema(conn):
     """Create tables from schema.sql."""
-    schema_path = get_schema_path()
-    schema_sql = schema_path.read_text(encoding='utf-8')
-
+    for path in MIGRATIONS_DIR.glob("V*__*.sql"):
+        schema_sql = path.read_text(encoding='utf-8')
+        conn.executescript(schema_sql)
+        logger.debug("[ok] applied %s", path.name)
     
-    conn.executescript(schema_sql)
     logger.info("Schema initialized at %s", DATABASE_PATH)
 
 
