@@ -1,5 +1,5 @@
 fastapi[standard]  #automatically pulls in the updated, pre-compiled versions of Uvicorn and Pydantic that match your Python environment seamlessly
 openpyxl
 python-dotenv
-
+pytest
 # update the version once dev is complete, so when installing as package we can have consistent version
